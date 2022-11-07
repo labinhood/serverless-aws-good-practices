@@ -12,6 +12,12 @@ The plugin is compatible with both v2 and v3 Serverless versions, as well as bot
   - [Standard Resource Tags (setStandardResourceTags = True)](#standard-resource-tags-setstandardresourcetags--true)
   - [Standard Environment Variables (setStandardEnvVars = True)](#standard-environment-variables-setstandardenvvars--true)
   - [Plugin's Custom Variables](#plugins-custom-variables)
+  - [Default Log Level](#default-log-level-loggerloglevel---debug--info--warn--error)
+- [Lambda Utils](#lambda-utils)
+  - [Middy Wrap "Essentials"](#middy-wrap-essentials)
+  - [Logger Instance](#logger-instance)
+  - [Usage: Middy Wrap "Essentials" and Logger Instance](#usage-middy-wrap-essentials-and-logger-instance)
+  - [Standarized Log Messages Samples](#standarized-log-messages-samples)
 
 ## Usage Documentation
 
@@ -158,7 +164,7 @@ The following is the list of environment variables the plugin adds by default to
 
 #### Plugin's Custom Variables
 
-The plugin also adds a couple of custom variables to the Serverless Framework that help in the standarization of resource naming.
+The plugin also adds a couple of custom variables that can help in the standarization of resource naming.
 
 What we observed when naming resources, is that concatenating manually by our team was error prone, for example, someone might start with the service name, and another team member might do stage name first, etc.; we added the following custom variables to make this simpler and ensure consistency, so feel free to use them anywhere in your configuration if useful:
 
@@ -186,11 +192,11 @@ By default, the Serverless Framework creates an S3 bucket in the target AWS acco
 myservicename-prod-serverlessdeploymentbucke-zshkvtwtq6s4
 ```
 
-The problem the above behaviour, is that every service-stage combination of your application will create a new bucket in the target account, leaving multiple S3 buckets behind if there is no solid cleanup routine as part of your CI/CD or workflow.
+The problem with dynamically named deployment buckets, is that every service-stage combination of your application will create a new bucket in the target account, leaving multiple S3 buckets behind if there is not a solid cleanup routine as part of your CI/CD or workflow.
 
-There is also a soft-limit of 100 buckets per account imposed by AWS, so if your applications create and rely on S3 buckets for user features, you and your team could find yourselves reaching such limit in some circumstances. The limit can be easily increased by submitting a request to AWS support, but in our opinion, it is much better to avoid the issue in the first place.
+There is also a soft-limit of 100 buckets per account imposed by AWS, so if your applications create and rely on S3 buckets for user features, you and your team could find yourselves reaching the limit in some circumstances. The limit can be easily increased by submitting a request to AWS support, but in our opinion, it is much better to avoid the issue in the first place.
 
-We can avoid the S3 bucket waste yard problem by setting our "provider.deploymentBucket" configuration of Serverless to the following values (the same values for YML and TypeScript configurations):
+We can avoid the S3 bucket "junk yard" problem by setting our "provider.deploymentBucket" configuration of Serverless to the following recommended values (the same values work for YML and TypeScript configurations):
 
 ```
 deploymentBucket: {
@@ -200,7 +206,7 @@ deploymentBucket: {
 }
 ```
 
-The plugin checks your "provider.deploymentBucket" configuration by default, and fail your deployment if any of the settings is different or missing. You can skip this behaviour by setting **checkDeploymentBucketConfig** to false, in which case the plugin will still issue a warning, but it will not fail your deployment.
+The plugin checks your "provider.deploymentBucket" configuration, and fail your deployment if any of the settings is different or missing. You can skip the failure behaviour by setting **checkDeploymentBucketConfig** to false, in which case the plugin will still issue a warning, but it will not fail your deployment.
 
 The reason these settings help, is that they make all services and stages utilize a single S3 bucket. The Serverless Framework stores all deployment bucket files in a service/stage directory structure by default, so it all works naturally well from there.
 
@@ -217,14 +223,16 @@ plugins:
   - serverless-deployment-bucket
 ```
 
-### Lambda Utils
+#### Default Log Level (loggerLogLevel = [ DEBUG | INFO | WARN | ERROR ])
 
-test
+This plugin configuration prop sets the default level of the "Logger" for Lambda made available with this same node module, for more information about this, please refer to the [Logger Instance](#logger-instance) section below.
+
+### Lambda Utils
 
 #### Middy Wrap "Essentials"
 
-test
-
 #### Logger Instance
+
+#### Usage: Middy Wrap "Essentials" and Logger Instance
 
 #### Standarized Log Messages Samples
