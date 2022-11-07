@@ -12,7 +12,7 @@ The plugin is compatible with both v2 and v3 Serverless versions, as well as bot
   - [Standard Resource Tags (setStandardResourceTags = True)](#standard-resource-tags-setstandardresourcetags--true)
   - [Standard Environment Variables (setStandardEnvVars = True)](#standard-environment-variables-setstandardenvvars--true)
   - [Plugin's Custom Variables](#plugins-custom-variables)
-  - [Default Log Level](#default-log-level-loggerloglevel--debug--info--warn--error)
+  - [Default Log Level](#default-log-level-loggerloglevel--info)
   - [Logger Debug Sample Rate](#logger-debug-sample-rate-loggerdebugsamplerate--001)
 - [Lambda Utils](#lambda-utils)
   - [Middy Wrap "Essentials"](#middy-wrap-essentials)
@@ -227,9 +227,11 @@ plugins:
   ...
 ```
 
-#### Default Log Level (loggerLogLevel = DEBUG | INFO | WARN | ERROR)
+#### Default Log Level (loggerLogLevel = INFO)
 
 This plugin configuration property sets the default level of the "Logger" for Lambda made available with this same node module, for more information about this, please refer to the [Logger Instance](#logger-instance) section below.
+
+Valid values for this property are: DEBUG, INFO, WARN and ERROR
 
 #### Logger Debug Sample Rate (loggerDebugSampleRate = 0.01)
 
