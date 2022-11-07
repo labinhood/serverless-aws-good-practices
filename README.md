@@ -29,7 +29,7 @@ $ npm install --save @labinhood/serverless-aws-good-practices
 
 ### Configuration
 
-For a detailed explanation of what each configuration option does, please refer to the [Serverless Plugin, Why and What?](#serverless-plugin-why-and-what) section below.
+For a detailed explanation of what each configuration option does, please refer to the [Serverless Plugin Functionality](#serverless-plugin-functionality) section below.
 
 The available configuration options and defaults are:
 
@@ -96,7 +96,7 @@ custom:
 
 ### Serverless Plugin Functionality
 
-The [Serverless Framework](https://www.serverless.com/) is great for building Serverless applications, and over time our team identified a set of boilerplate good practices we wanted to include in all of our projects for observability and cost reporting reasons.
+The [Serverless Framework](https://www.serverless.com/){:target="\_blank"} is great for building Serverless applications, and over time our team identified a set of boilerplate good practices we wanted to include in all of our projects for observability and cost reporting reasons.
 
 Our team also wanted to be able to add and update fast and efficiently our good practices as they evolved, the plugin mechanism of the Serverless Framework provided such means, and here we are :)
 
