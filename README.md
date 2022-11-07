@@ -229,10 +229,242 @@ This plugin configuration prop sets the default level of the "Logger" for Lambda
 
 ### Lambda Utils
 
+Lambda Utils are importable objects and classes, complementary to actions performed by the Serverless Plugin functionality in the module, they help initialize Lambda functions with Serverless/AWS good practices, standardized logging, etc.
+
 #### Middy Wrap "Essentials"
+
+A "wrap" function that initializes Lambdas with essential Middy middleware that provides standarized logging, error handling and related functionality.
+
+The following is the specific middleware it wraps, and the configuration it initializes:
+
+1. Middy - Error Logger Middleware (npm: @middy/error-logger)
+   Catches any uncaught exceptions by the application, and ensures a standardized message makes it to the log stream in such scenarios.
+
+2. Middy - Do Not Wait for Empty Event Loop Middleware (npm: @middy/do-not-wait-for-empty-event-loop )
+   Middy middleware that prevents Lambda from timing out because of open database connections, etc.
+
+3. PowerTools - Capture Correlation Ids (npm: @dazn/lambda-powertools-middleware-correlation-ids)
+   Middleware that helps capture and extend log messages with Correlation IDs.
+
+4. PowerTools - Sample Logging (npm: @dazn/lambda-powertools-middleware-sample-logging)
+   Middleware that enables the DEBUG log level to a configurable percentage of the invocations, which provides detailed samples for simpler Production troubleshooting.
+
+5. PowerTools - Log Timeout (npm: @dazn/lambda-powertools-middleware-log-timeout)
+   Middleware that sends standard log messages to the log stream for Lambda’s that timeout (which otherwise does not happen by default). A copy of this middleware was made and modified to use the Logger Instace documented below.
 
 #### Logger Instance
 
+The Logger instance is a good complement to the “Essentials“ Middy Wrap, it allows developers to easily add logging to applications that has a common structure across the team, which can be key to log aggregation and observability.
+
+The Logger instance extends the PowerTools Logger by DAZN, adding a few new attributes to all messages; the usage is exactly the same as described by the original documentation:
+https://github.com/getndazn/dazn-lambda-powertools/tree/master/packages/lambda-powertools-logger
+
+The customized version of the “Logger“ extends log messages with the following attributes:
+
+| Attribute    | Value From                                                                      |
+| :----------- | :------------------------------------------------------------------------------ |
+| awsAccountId |                                                                                 |
+| appName      | "app" in Serverless configuration                                               |
+| serviceName  | "service" in Serverless configuration                                           |
+| appEnv       | Serverless "stage"                                                              |
+| appVersion   | if provided, coming from the "resourceTagsData.AppVersion" plugin's config prop |
+
 #### Usage: Middy Wrap "Essentials" and Logger Instance
 
+Both the Middy Wrap "Essentials" and Logger Instance (Log.[method]) can be imported and used from code in the following way:
+
+```js
+import { middyWrapEssentials, Log } from '@labinhood/serverless-aws-good-practices';
+...
+// Create your handler function, like:
+const baseHandler = async (event, context) => {
+  // ... Business Logic
+
+  // To send Log messages:
+  Log.debug(msg, extraMsgAttributes);
+  Log.info(msg, extraMsgAttributes);
+  Log.warn(msg, extraMsgAttributes, err);
+  Log.error(msg, extraMsgAttributes, err);
+
+  // Enable debug mode - any "Log.debug" calls make it to the log stream
+  Log.enableDebug();
+
+  // Reset log level to initial setting - any Log entries "lower" than the initial "logLevel" are kept out of the log stream
+  // (defined by the "custom.prGoodPracticesPlugin.logLevel" setting, with options: DEBUG, INFO, WARN, ERROR)
+  Log.resetLevel();
+}
+...
+// ... And wrap it, like:
+export const handler = middyWrapEssentials(baseHandler)
+```
+
 #### Standarized Log Messages Samples
+
+##### Log.debug('your message here')
+
+```json
+{
+  "message": "your message here",
+  "awsAccountId": "123456789012",
+  "appName": "myapp",
+  "serviceName": "myservice",
+  "appEnv": "prod",
+  "appVersion": "1.0.0",
+  "awsRegion": "us-east-1",
+  "functionName": "myapp-prod-MyLambdaFunction",
+  "functionVersion": "$LATEST",
+  "functionMemorySize": "128",
+  "awsRequestId": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "x-correlation-id": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "debug-log-enabled": "false",
+  "call-chain-length": 1,
+  "level": 20,
+  "sLevel": "DEBUG"
+}
+```
+
+##### Log.info('your message here')
+
+```json
+{
+  "message": "your message here",
+  "awsAccountId": "123456789012",
+  "appName": "myapp",
+  "serviceName": "myservice",
+  "appEnv": "prod",
+  "appVersion": "1.0.0",
+  "awsRegion": "us-east-1",
+  "functionName": "myapp-prod-MyLambdaFunction",
+  "functionVersion": "$LATEST",
+  "functionMemorySize": "128",
+  "awsRequestId": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "x-correlation-id": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "debug-log-enabled": "false",
+  "call-chain-length": 1,
+  "level": 30,
+  "sLevel": "INFO"
+}
+```
+
+##### Log.warn('your message here')
+
+```json
+{
+  "message": "your message here",
+  "awsAccountId": "123456789012",
+  "appName": "myapp",
+  "serviceName": "myservice",
+  "appEnv": "prod",
+  "appVersion": "1.0.0",
+  "awsRegion": "us-east-1",
+  "functionName": "myapp-prod-MyLambdaFunction",
+  "functionVersion": "$LATEST",
+  "functionMemorySize": "128",
+  "awsRequestId": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "x-correlation-id": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "debug-log-enabled": "false",
+  "call-chain-length": 1,
+  "level": 40,
+  "sLevel": "WARN"
+}
+```
+
+##### Log.error('your message here') / (Passing only a string)
+
+```json
+{
+  "message": "your message here",
+  "awsAccountId": "123456789012",
+  "appName": "myapp",
+  "serviceName": "myservice",
+  "appEnv": "prod",
+  "appVersion": "1.0.0",
+  "awsRegion": "us-east-1",
+  "functionName": "myapp-prod-MyLambdaFunction",
+  "functionVersion": "$LATEST",
+  "functionMemorySize": "128",
+  "awsRequestId": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "x-correlation-id": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "debug-log-enabled": "false",
+  "call-chain-length": 1,
+  "level": 50,
+  "sLevel": "ERROR"
+}
+```
+
+##### Log.error('your message here', new Error('Ouch')) / (Passing an Error instance)
+
+```json
+{
+  "message": "your message here",
+  "errorName": "Error",
+  "errorMessage": "Ouch",
+  "stackTrace": "Error: Ouch at baseHandler ... /main.js:123:36)",
+  "awsAccountId": "123456789012",
+  "appName": "myapp",
+  "serviceName": "myservice",
+  "appEnv": "prod",
+  "appVersion": "1.0.0",
+  "awsRegion": "us-east-1",
+  "functionName": "myapp-prod-MyLambdaFunction",
+  "functionVersion": "$LATEST",
+  "functionMemorySize": "128",
+  "awsRequestId": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "x-correlation-id": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "debug-log-enabled": "false",
+  "call-chain-length": 1,
+  "level": 50,
+  "sLevel": "ERROR"
+}
+```
+
+##### Uncaught Exception
+
+```json
+{
+  "message": "invocation failed",
+  "errorName": "ReferenceError",
+  "errorMessage": "sfd is not defined",
+  "stackTrace": "ReferenceError: x is not defined ... main.js:123:36)",
+  "awsAccountId": "123456789012",
+  "appName": "myapp",
+  "serviceName": "myservice",
+  "appEnv": "prod",
+  "appVersion": "1.0.0",
+  "awsRegion": "us-east-1",
+  "functionName": "myapp-prod-MyLambdaFunction",
+  "functionVersion": "$LATEST",
+  "functionMemorySize": "128",
+  "awsRequestId": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "x-correlation-id": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "debug-log-enabled": "false",
+  "call-chain-length": 1,
+  "level": 50,
+  "sLevel": "ERROR"
+}
+```
+
+##### Lambda Timeout
+
+```json
+{
+  "message": "invocation timed out",
+  "awsRequestId": "f30fcc0c-b811-40be-aaea-df9d7d03a9a4",
+  "invocationEvent": "{\"version\":\"0\",\"id\":\"f1314e05-42cc-186a-8de6-cbcf05dad9de\",\"detail-type\":...",
+  "awsAccountId": "123456789012",
+  "appName": "myapp",
+  "serviceName": "myservice",
+  "appEnv": "prod",
+  "appVersion": "1.0.0",
+  "awsRegion": "us-east-1",
+  "functionName": "myapp-prod-MyLambdaFunction",
+  "functionVersion": "$LATEST",
+  "functionMemorySize": "128",
+  "awsRequestId": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "x-correlation-id": "f56de7fd-fd99-4f12-834f-4e7ac5b16ea0",
+  "debug-log-enabled": "false",
+  "call-chain-length": 1,
+  "level": 50,
+  "sLevel": "ERROR"
+}
+```
