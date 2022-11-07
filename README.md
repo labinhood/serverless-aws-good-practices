@@ -237,7 +237,7 @@ Capturing debug level traces in Production can be costly, at the same time, Prod
 
 The **loggerDebugSampleRate** config property enables DEBUG logging level at random for the percentage of invocations it defines, so _some_ debug messages are captured in Production, providing a valuable sample of detailed data without the disadvantages that capturing everything would create.
 
-For this to work, you will need to use the complementary [Logger Instance](#logger-instance) and add calls to the "Log.debug()" function in key places of your application, providing as much information you might need to troubleshoot if something goes wrong. Do not worry much about the size of those messages, only the X percentage of invocations will actually execute those "Log.debug()" calls (0.01 or 1% by default).
+For this to work, you will need to use the complementary [Logger Instance](#logger-instance) and add calls to the "Log.debug()" function in key places of your application, providing as much information you might need to troubleshoot if something goes wrong. Do not worry much about the size of those messages, only the X percentage of invocations will actually execute those "Log.debug()" calls (0.01 or 1% by default, but you can define this).
 
 In key areas of your code, add lines like:
 
