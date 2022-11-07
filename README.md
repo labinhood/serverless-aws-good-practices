@@ -27,7 +27,7 @@ The plugin is compatible with both v2 and v3 Serverless versions, as well as bot
 $ npm install @labinhood/serverless-aws-good-practices --save
 ```
 
-This will install the plugin in the main "dependencies" section of package.json, this is mainly needed if your code uses any of the [Lambda Utils](#lambda-utils) included with the package.
+The command above will install the plugin in the main "dependencies" section of package.json, this is mainly needed if your code uses any of the [Lambda Utils](#lambda-utils) included with the package.
 
 ### Configuration
 
