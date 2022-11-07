@@ -96,7 +96,7 @@ custom:
 
 ### Serverless Plugin Functionality
 
-The [Serverless Framework](https://www.serverless.com/){:target="\_blank"} is great for building Serverless applications, and over time our team identified a set of boilerplate good practices we wanted to include in all of our projects for observability and cost reporting reasons.
+The <a href="https://www.serverless.com/" target="_blank">Serverless Framework</a> is great for building Serverless applications, and over time our team identified a set of boilerplate good practices we wanted to include in all of our projects for observability and cost reporting reasons.
 
 Our team also wanted to be able to add and update fast and efficiently our good practices as they evolved, the plugin mechanism of the Serverless Framework provided such means, and here we are :)
 
