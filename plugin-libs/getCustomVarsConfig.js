@@ -22,7 +22,7 @@ function getCustomVarsConfig() {
 
         if (!resolvedValue) {
           throw new Error(
-            "LabinHood's AWS Good Practices Plugin / Custom variables error," +
+            "AWS Good Practices Plugin / Custom variables error," +
               ' could not resolve "agp:' +
               address +
               '", available options: ' +

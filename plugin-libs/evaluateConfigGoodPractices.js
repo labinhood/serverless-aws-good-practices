@@ -11,6 +11,21 @@ function evaluateConfigGoodPractices() {
   // per AWS account for all Serverless deployments, preventing waste and leaving
   // unused buckets behind
   this.log('... Reviewing "provider.deploymentBucket" settings');
+
+  var slsPluginsConfiguration = this.get(
+    this.serverless,
+    "configurationInput.plugins",
+    []
+  );
+
+  if (slsPluginsConfiguration.indexOf("serverless-deployment-bucket") === -1) {
+    this.log(
+      '... The Serverless plugin "serverless-deployment-bucket" is recommended, to manage the lifecycle of your custom deployment bucket',
+      false,
+      true
+    );
+  }
+
   var depBucketConvention = {
     name: "serverless-deployment-bucket-account-${aws:accountId}-${aws:region}",
     serverSideEncryption: "AES256",

@@ -8,9 +8,10 @@ The plugin is compatible with both v2 and v3 Serverless versions, as well as bot
 
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Serverless Plugin, Why and What?](#serverless-plugin-why-and-what)
-- [Set Standard Resource Tags (setStandardResourceTags = True)](#set-standard-resource-tags-setstandardresourcetags--true)
-- [Plugin's Custom Variables](#plugins-custom-variables)
+- [Serverless Plugin Functionality](#serverless-plugin-functionality)
+  - [Standard Resource Tags (setStandardResourceTags = True)](#standard-resource-tags-setstandardresourcetags--true)
+  - [Standard Environment Variables (setStandardEnvVars = True)](#standard-environment-variables-setstandardenvvars--true)
+  - [Plugin's Custom Variables](#plugins-custom-variables)
 
 ## Usage Documentation
 
@@ -87,13 +88,13 @@ custom:
       - "[AdditionalTypeIfAny_B]"
 ```
 
-### Serverless Plugin, Why and What?
+### Serverless Plugin Functionality
 
 The [Serverless Framework](https://www.serverless.com/) is great for building Serverless applications, and over time our team identified a set of boilerplate good practices we wanted to include in all of our projects for observability and cost reporting reasons.
 
 Our team also wanted to be able to add and update fast and efficiently our good practices as they evolved, the plugin mechanism of the Serverless Framework provided such means, and here we are :)
 
-#### Set Standard Resource Tags (setStandardResourceTags = True)
+#### Standard Resource Tags (setStandardResourceTags = True)
 
 AWS resource tags are of great help for reporting, specially in a multi-account and/or multi-application environment, given they can provide high level views of cost across the organization by combinining those tags in different ways. e.g. how much all AppEnv = 'staging' resources are costing us across departments, or only those of Department = 'marketing', etc.
 
@@ -130,7 +131,7 @@ The list of resource tags the plugin creates, and defaults are the following:
 | AppAccountId  | Auto: Deployment AWS account ID        |                                                                                                                                                                                                                        |
 | AppRegion     | Auto: Deployment AWS region            |                                                                                                                                                                                                                        |
 
-#### Set Standard Environment Variables (setStandardEnvVars = True)
+#### Standard Environment Variables (setStandardEnvVars = True)
 
 Similar to the automatic creation of resource tags, the plugin also injects a set of standard environment variables, it does this by adding such definitions to the "provider.environment" property of Serverless, so resources like all of your Lambda functions receive such environment variables by default, exactly the same as if you had added them manually to the Serverless property.
 
@@ -175,7 +176,46 @@ DynamoTableOrders: {
       TableName: '${agp:sls-default-name}-Orders'
 ```
 
-#### Deployment Bucket Standarization
+#### Deployment Bucket Recommended Configuration
+
+Context:
+
+By default, the Serverless Framework creates an S3 bucket in the target AWS account with a dynamically generated name to store files related to each stack it deploys, like:
+
+```
+myservicename-prod-serverlessdeploymentbucke-zshkvtwtq6s4
+```
+
+The problem the above behaviour, is that every service-stage combination of your application will create a new bucket in the target account, leaving multiple S3 buckets behind if there is no solid cleanup routine as part of your CI/CD or workflow.
+
+There is also a soft-limit of 100 buckets per account imposed by AWS, so if your applications create and rely on S3 buckets for user features, you and your team could find yourselves reaching such limit in some circumstances. The limit can be easily increased by submitting a request to AWS support, but in our opinion, it is much better to avoid the issue in the first place.
+
+We can avoid the S3 bucket waste yard problem by setting our "provider.deploymentBucket" configuration of Serverless to the following values (the same values for YML and TypeScript configurations):
+
+```
+deploymentBucket: {
+  name: 'serverless-deployment-bucket-account-${aws:accountId}-${aws:region}',
+  serverSideEncryption: 'AES256',
+  blockPublicAccess: true
+}
+```
+
+The plugin checks your "provider.deploymentBucket" configuration by default, and fail your deployment if any of the settings is different or missing. You can skip this behaviour by setting **checkDeploymentBucketConfig** to false, in which case the plugin will still issue a warning, but it will not fail your deployment.
+
+The reason these settings help, is that they make all services and stages utilize a single S3 bucket. The Serverless Framework stores all deployment bucket files in a service/stage directory structure by default, so it all works naturally well from there.
+
+**IMPORTANT:** also, please ensure to install the "serverless-deployment-bucket" plugin and load it into your Serverless configuration, otherwise your deployment might fail the very first time when the bucket does not yet exist:
+
+[Serverless Deployment Bucket Plugin](https://www.serverless.com/plugins/serverless-deployment-bucket)
+
+```
+npm install serverless-deployment-bucket --save-dev
+...
+# And in your Serverless configuration (YML in this example):
+
+plugins:
+  - serverless-deployment-bucket
+```
 
 ### Lambda Utils
 
