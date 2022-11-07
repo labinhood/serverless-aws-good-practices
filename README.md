@@ -12,7 +12,7 @@ The plugin is compatible with both v2 and v3 Serverless versions, as well as bot
   - [Standard Resource Tags (setStandardResourceTags = True)](#standard-resource-tags-setstandardresourcetags--true)
   - [Standard Environment Variables (setStandardEnvVars = True)](#standard-environment-variables-setstandardenvvars--true)
   - [Plugin's Custom Variables](#plugins-custom-variables)
-  - [Default Log Level](#default-log-level-loggerloglevel---debug--info--warn--error)
+  - [Default Log Level](#default-log-level-loggerloglevel--debug--info--warn--error)
   - [Logger Debug Sample Rate](#logger-debug-sample-rate-loggerdebugsamplerate--001)
 - [Lambda Utils](#lambda-utils)
   - [Middy Wrap "Essentials"](#middy-wrap-essentials)
