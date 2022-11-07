@@ -227,7 +227,7 @@ plugins:
   ...
 ```
 
-#### Default Log Level (loggerLogLevel = [ DEBUG | INFO | WARN | ERROR ])
+#### Default Log Level (loggerLogLevel = DEBUG | INFO | WARN | ERROR)
 
 This plugin configuration property sets the default level of the "Logger" for Lambda made available with this same node module, for more information about this, please refer to the [Logger Instance](#logger-instance) section below.
 
