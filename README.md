@@ -159,12 +159,23 @@ The following is the list of environment variables the plugin adds by default to
 
 The plugin also adds a couple of custom variables to the Serverless Framework that help in the standarization of resource naming.
 
-What we observed when naming resources, is that concatenating manually by our team was error prone, for example, someone might start with the service name, and another team member might do stage name first, etc.; we added the following custom variables to make this simpler and ensure consistency:
+What we observed when naming resources, is that concatenating manually by our team was error prone, for example, someone might start with the service name, and another team member might do stage name first, etc.; we added the following custom variables to make this simpler and ensure consistency, so feel free to use them anywhere in your configuration if useful:
 
-| Custom Variable         | Description                                                                                                                                                                                                                                                                                                                      |
-| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ${pr:sls-default-name}  | Returns the combination of: [service_name]-[stage_name]. It can be used to name resources that do not require the ‘regional level’ in their names (most resources)                                                                                                                                                               |
-| ${pr:sls-regional-name} | Returns the combination of: [service_name]-[stage_name]-[region]. It can be used to name resources that DO require the 'regional level' in their names (e.g. IAM roles; given IAM is a global service, deployments of the same stack in multiple regions would cause role name clashes, use this prefix to avoid such scenarios) |
+| Custom Variable          | Description                                                                                                                                                                                                                                                                                                                      |
+| :----------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ${agp:sls-default-name}  | Returns the combination of: [service_name]-[stage_name]. It can be used to name resources that do not require the ‘regional level’ in their names (most resources)                                                                                                                                                               |
+| ${agp:sls-regional-name} | Returns the combination of: [service_name]-[stage_name]-[region]. It can be used to name resources that DO require the 'regional level' in their names (e.g. IAM roles; given IAM is a global service, deployments of the same stack in multiple regions would cause role name clashes, use this prefix to avoid such scenarios) |
+
+Usage example (works in both YML and TypeScript configurations):
+
+```
+DynamoTableOrders: {
+    Type: 'AWS::DynamoDB::Table',
+    Properties: {
+      TableName: '${agp:sls-default-name}-Orders'
+```
+
+#### Deployment Bucket Standarization
 
 ### Lambda Utils
 
