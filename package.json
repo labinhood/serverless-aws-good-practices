@@ -8,6 +8,7 @@
     "require": "./index.js",
     "import": "./lambda-utils/esm/index.js"
   },
+  "types": "./lambda-utils/esm/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/labinhood/serverless-aws-good-practices"
