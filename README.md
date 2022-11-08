@@ -112,6 +112,7 @@ With the **setStandardResourceTags** config prop set to true (default), the plug
 - AWS::ApiGateway::Stage
 - AWS::CloudFront::Distribution
 - AWS::DynamoDB::Table
+- AWS::Events::EventBus
 - AWS::IAM::Role
 - AWS::Kinesis::Stream
 - AWS::Lambda::Function
@@ -120,6 +121,8 @@ With the **setStandardResourceTags** config prop set to true (default), the plug
 - AWS::SQS::Queue
 
 For extensibility, the plugin also supports a "**resourceTagsAdditionalTypes**" config prop, where additional resource types can be passed to include with the list; just beware the targeted resources must support the "Tags" CloudFormation property, otherwise your deployment will fail.
+
+Tag names created are prefixed with "agp" by default (which stands for AWS Good Practices, the plugin name); such behaviour can be overriden by setting the "**resourceTagsPrefix**" config prop to an specific value (e.g. a value of "mycompany" would produce tag names like "mycompany:AppName" insetad), or you can also set it to an empty string to create tag names without a prefix.
 
 About the tags themselves, we tried to provide a set of standard values appropriate for most classification and reporting needs, and to auto-populate some with runtime values by default (they all can be overriden if desired, even the ones we populate automatically).
 
