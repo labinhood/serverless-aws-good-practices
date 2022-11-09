@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/labinhood/serverless-aws-good-practices/issues"
   },
-  "homepage": "https://github.com/labinhood/serverless-aws-good-practices#readme",
+  "homepage": "https://labinhood.com/blog/2022/11/serverless-aws-good-practices-the-plugin",
   "dependencies": {
     "@dazn/lambda-powertools-logger": "^1.28.1",
     "@dazn/lambda-powertools-middleware-correlation-ids": "^1.29.0",
