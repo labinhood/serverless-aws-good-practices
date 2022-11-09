@@ -15,7 +15,7 @@ class AWSGoodPracticesPlugin {
     this.options = options;
     this.v3Utils = v3Utils;
     this.provider = serverless.getProvider("aws");
-    this.pluginName = "LabinHood's AWS Good Practices Plugin";
+    this.pluginName = "AWS Good Practices Plugin";
     this.customConfigSectionName = "awsGoodPractices";
 
     // Shared util

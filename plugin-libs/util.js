@@ -4,7 +4,7 @@ var chalk = require("chalk");
 
 function log(msg, addPluginName = false, inverseColor = false) {
   if (addPluginName) {
-    msg = this.pluginName + " / " + msg;
+    msg = this.pluginName + ": " + msg;
   }
   if (!this.v3Utils) {
     if (inverseColor) {

@@ -23,6 +23,7 @@ function executeSetStandardTags() {
       "AWS::ApiGateway::Stage",
       "AWS::CloudFront::Distribution",
       "AWS::DynamoDB::Table",
+      "AWS::Events::EventBus",
       "AWS::IAM::Role",
       "AWS::Kinesis::Stream",
       "AWS::Lambda::Function",
@@ -103,6 +104,14 @@ function executeSetStandardTags() {
               );
           }
         }
+      } else {
+        this.log(
+          "...    INFO ... Not adding tags to resource " +
+            resourceType +
+            " (" +
+            resourceName +
+            ")"
+        );
       }
     });
   } // END enabled?
