@@ -32,6 +32,23 @@ The command above will install the plugin in the "dependencies" section of packa
 
 ### Configuration
 
+Once installed, the plugin can be enabled in your Serverless configuration file, like (TypeScript):
+
+```js
+plugins: [
+  '@labinhood/serverless-aws-good-practices'
+  ...
+],
+```
+
+Or like this in YML:
+
+```yaml
+plugins:
+  - '@labinhood/serverless-aws-good-practices'
+  ...
+```
+
 For a detailed explanation of what each configuration option does, please refer to the [Serverless Plugin Functionality](#serverless-plugin-functionality) section below.
 
 The available configuration options and defaults are:
