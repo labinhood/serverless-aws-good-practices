@@ -49,7 +49,9 @@ plugins:
   ...
 ```
 
-The available configuration options and defaults are listed next. For a detailed explanation of what each configuration option does, please refer to the [Serverless Plugin Functionality](#serverless-plugin-functionality):
+The available configuration options and defaults are listed next. For a detailed explanation of what each configuration option does, please refer to the [Serverless Plugin Functionality](#serverless-plugin-functionality) section of this document.
+
+Configuration options:
 
 #### TypeScript (serverless.ts)
 
