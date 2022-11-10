@@ -9,8 +9,8 @@ The plugin is compatible with both v2 and v3 Serverless versions, as well as bot
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Serverless Plugin Functionality](#serverless-plugin-functionality)
-  - [Standard Resource Tags (setStandardResourceTags = True)](#standard-resource-tags-setstandardresourcetags--true)
-  - [Standard Environment Variables (setStandardEnvVars = True)](#standard-environment-variables-setstandardenvvars--true)
+  - [Standard Resource Tags (createStandardResourceTags = True)](#standard-resource-tags-createstandardresourcetags--true)
+  - [Standard Environment Variables (createStandardEnvVars = True)](#standard-environment-variables-createstandardenvvars--true)
   - [Plugin's Custom Variables](#plugins-custom-variables)
   - [Default Log Level](#default-log-level-loggerloglevel--info)
   - [Logger Debug Sample Rate](#logger-debug-sample-rate-loggerdebugsamplerate--001)
@@ -59,8 +59,8 @@ Configuration options:
 {
   custom: {
     awsGoodPractices: {
-      setStandardResourceTags: true,
-      setStandardEnvVars: true,
+      createStandardResourceTags: true,
+      createStandardEnvVars: true,
       checkDeploymentBucketConfig: true,
       loggerLogLevel: "INFO",
       loggerDebugSampleRate: 0.01,
@@ -90,8 +90,8 @@ Configuration options:
 ```yml
 custom:
   awsGoodPractices:
-    setStandardResourceTags: true
-    setStandardEnvVars: true
+    createStandardResourceTags: true
+    createStandardEnvVars: true
     checkDeploymentBucketConfig: true
     loggerLogLevel: "INFO"
     loggerDebugSampleRate: 0.01
@@ -120,11 +120,11 @@ The <a href="https://www.serverless.com/" target="_blank">Serverless Framework</
 
 Our team also wanted to be able to add and update fast and efficiently our good practices across multiple Serverless projects as they evolved, the plugin mechanism of the Serverless Framework provided such means, and here we are :)
 
-#### Standard Resource Tags (setStandardResourceTags = True)
+#### Standard Resource Tags (createStandardResourceTags = True)
 
 AWS resource tags are of great help for reporting, specially in a multi-account and/or multi-application environment, given they can provide high level views of cost across the organization by combinining those tags in different ways. e.g. how much all AppEnv = 'staging' resources are costing us across departments, or only those of Department = 'marketing', etc.
 
-With the **setStandardResourceTags** config prop set to true (default), the plugin adds a set of standard tags to the following resources created by the Serverless application during deployment:
+With the **createStandardResourceTags** config prop set to true (default), the plugin adds a set of standard tags to the following resources created by the Serverless application during deployment:
 
 - AWS::ApiGateway::Stage
 - AWS::CloudFront::Distribution
@@ -160,7 +160,7 @@ The list of resource tags the plugin creates, and defaults are the following:
 | AppAccountId  | Auto: Deployment AWS account ID        |                                                                                                                                                                                                                        |
 | AppRegion     | Auto: Deployment AWS region            |                                                                                                                                                                                                                        |
 
-#### Standard Environment Variables (setStandardEnvVars = True)
+#### Standard Environment Variables (createStandardEnvVars = True)
 
 Similar to the automatic creation of resource tags, the plugin also injects a set of standard environment variables, it does this by adding such definitions to the "provider.environment" property of Serverless, so resources like all of your Lambda functions receive such environment variables by default, exactly the same as if you had added them manually to the Serverless property.
 

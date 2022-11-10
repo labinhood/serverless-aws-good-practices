@@ -9,8 +9,8 @@ function getTagNames(srcArray) {
 }
 
 function executeSetStandardTags() {
-  if (!this.config.setStandardResourceTags) {
-    this.log("Adding standard resource tags is disabled, skipping ...", true);
+  if (!this.config.createStandardResourceTags) {
+    this.log("Create standard resource tags is disabled, skipping ...", true);
   } else {
     // Init
     var _this = this;

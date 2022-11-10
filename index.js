@@ -31,7 +31,7 @@ class AWSGoodPracticesPlugin {
     evaluateConfigGoodPractices.bind(this)();
 
     // setEnvVars? - standard environment variables for Lambda
-    if (this.config.setStandardEnvVars) {
+    if (this.config.createStandardEnvVars) {
       executeSetStandardEnvVars.bind(this)();
     }
 
@@ -69,8 +69,8 @@ class AWSGoodPracticesPlugin {
     this.log("Collecting and verifying plugin's configuration ..", true);
     this.config = Object.assign(
       {
-        setStandardResourceTags: true,
-        setStandardEnvVars: true,
+        createStandardResourceTags: true,
+        createStandardEnvVars: true,
         checkDeploymentBucketConfig: true,
         loggerLogLevel: "INFO",
         loggerDebugSampleRate: 0.01,
